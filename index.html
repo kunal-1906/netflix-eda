@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Superstore Sales Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white; padding: 20px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.5px; }
+    header span { font-size: 0.85rem; opacity: 0.7; }
+
+    .filters {
+      background: white; padding: 14px 32px;
+      display: flex; gap: 20px; align-items: center;
+      border-bottom: 2px solid #e8eaf0; flex-wrap: wrap;
+    }
+    .filters label { font-size: 0.85rem; font-weight: 600; color: #555; }
+    .filters select {
+      padding: 7px 14px; border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 0.9rem; background: #fafafa; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filters select:focus { outline: none; border-color: #4361ee; }
+    .filters button {
+      padding: 8px 20px; background: #4361ee; color: white;
+      border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+      font-weight: 600; transition: background 0.2s;
+    }
+    .filters button:hover { background: #3451d1; }
+
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 20px; padding: 24px 32px 0;
+    }
+    .kpi {
+      background: white; border-radius: 14px; padding: 20px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      border-left: 4px solid;
+    }
+    .kpi:nth-child(1) { border-color: #4361ee; }
+    .kpi:nth-child(2) { border-color: #06d6a0; }
+    .kpi:nth-child(3) { border-color: #f72585; }
+    .kpi:nth-child(4) { border-color: #ffd166; }
+    .kpi .label { font-size: 0.78rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+    .kpi .value { font-size: 1.75rem; font-weight: 800; margin: 6px 0 2px; }
+    .kpi .sub { font-size: 0.8rem; color: #06d6a0; font-weight: 600; }
+    .kpi .sub.neg { color: #f72585; }
+
+    .charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px; padding: 20px 32px;
+    }
+    .chart-card {
+      background: white; border-radius: 14px; padding: 22px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .chart-card.full { grid-column: 1 / -1; }
+    .chart-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: #1a1a2e; }
+    .chart-card canvas { max-height: 280px; }
+
+    .table-card {
+      background: white; border-radius: 14px; padding: 22px;
+      margin: 0 32px 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .table-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { background: #f8f9ff; padding: 11px 14px; text-align: left; font-weight: 700; color: #555; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 11px 14px; border-bottom: 1px solid #f0f2f5; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafbff; }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.78rem; font-weight: 700;
+    }
+    .badge.high { background: #e8f5e9; color: #2e7d32; }
+    .badge.med  { background: #fff3e0; color: #e65100; }
+    .badge.low  { background: #fce4ec; color: #c62828; }
+
+    footer { text-align: center; padding: 16px; font-size: 0.8rem; color: #aaa; }
+
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .chart-card.full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📊 Superstore Sales Dashboard</h1>
+    <span>Interactive Business Intelligence Report — FY 2021–2024</span>
+  </div>
+  <span style="font-size:0.8rem; opacity:0.6;">Built by Kunal Vig</span>
+</header>
+
+<div class="filters">
+  <label>Region:</label>
+  <select id="regionFilter" onchange="applyFilters()">
+    <option value="all">All Regions</option>
+    <option value="North">North</option>
+    <option value="South">South</option>
+    <option value="East">East</option>
+    <option value="West">West</option>
+  </select>
+
+  <label>Category:</label>
+  <select id="categoryFilter" onchange="applyFilters()">
+    <option value="all">All Categories</option>
+    <option value="Technology">Technology</option>
+    <option value="Furniture">Furniture</option>
+    <option value="Office Supplies">Office Supplies</option>
+  </select>
+
+  <label>Year:</label>
+  <select id="yearFilter" onchange="applyFilters()">
+    <option value="all">All Years</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+  </select>
+
+  <button onclick="resetFilters()">Reset Filters</button>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="label">Total Revenue</div>
+    <div class="value" id="kpiRevenue">₹0</div>
+    <div class="sub" id="kpiRevGrowth">+0% vs last year</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Total Orders</div>
+    <div class="value" id="kpiOrders">0</div>
+    <div class="sub" id="kpiOrdGrowth">+0% vs last year</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Total Profit</div>
+    <div class="value" id="kpiProfit">₹0</div>
+    <div class="sub" id="kpiProfGrowth">+0% vs last year</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Avg Order Value</div>
+    <div class="value" id="kpiAOV">₹0</div>
+    <div class="sub" id="kpiAovGrowth">+0% vs last year</div>
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="chart-card full">
+    <h3>📈 Monthly Revenue Trend</h3>
+    <canvas id="trendChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>🌍 Revenue by Region</h3>
+    <canvas id="regionChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>📦 Revenue by Category</h3>
+    <canvas id="categoryChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>💰 Profit Margin by Category</h3>
+    <canvas id="profitChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>🚚 Orders by Ship Mode</h3>
+    <canvas id="shipChart"></canvas>
+  </div>
+</div>
+
+<div class="table-card">
+  <h3>🏆 Top 10 Products by Revenue</h3>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Product</th><th>Category</th><th>Revenue</th><th>Profit</th><th>Margin</th><th>Performance</th></tr>
+    </thead>
+    <tbody id="topProductsTable"></tbody>
+  </table>
+</div>
+
+<footer>Superstore Sales Dashboard | Built with HTML, CSS & Chart.js | Kunal Vig — Data Analytics Portfolio Project</footer>
+
+<script>
+// ── Raw Dataset ────────────────────────────────────────────────────────────────
+const rawData = [
+  // Region, Category, SubCat, Product, Year, Month, Revenue, Profit, Orders, ShipMode
+  ["North","Technology","Phones","Samsung Galaxy S23",2021,1,142000,35500,12,"Standard"],
+  ["North","Technology","Phones","Samsung Galaxy S23",2021,4,165000,41250,14,"Express"],
+  ["North","Technology","Laptops","Dell XPS 15",2021,2,210000,52500,9,"Standard"],
+  ["North","Technology","Laptops","Apple MacBook Pro",2022,3,320000,80000,11,"Express"],
+  ["North","Technology","Phones","iPhone 14",2022,6,185000,46250,16,"Standard"],
+  ["North","Technology","Accessories","Logitech MX Keys",2022,8,42000,12600,35,"Economy"],
+  ["North","Furniture","Chairs","ErgoChair Pro",2021,3,95000,19000,8,"Standard"],
+  ["North","Furniture","Tables","Standing Desk Pro",2021,7,125000,25000,5,"Standard"],
+  ["North","Furniture","Bookcases","IKEA Billy Bookcase",2022,2,38000,7600,12,"Economy"],
+  ["North","Office Supplies","Binders","Avery Heavy Duty",2021,5,18000,5400,45,"Economy"],
+  ["North","Office Supplies","Paper","HP Printer Paper",2021,9,22000,6600,60,"Economy"],
+  ["North","Office Supplies","Storage","Sterilite Drawers",2022,11,31000,9300,28,"Standard"],
+  ["South","Technology","Phones","iPhone 14 Pro",2021,2,195000,48750,15,"Express"],
+  ["South","Technology","Phones","OnePlus 11",2022,4,88000,22000,18,"Standard"],
+  ["South","Technology","Laptops","Lenovo ThinkPad",2021,6,178000,44500,8,"Standard"],
+  ["South","Technology","Laptops","HP Spectre x360",2022,9,225000,56250,10,"Express"],
+  ["South","Technology","Accessories","Apple AirPods Pro",2022,1,65000,19500,30,"Standard"],
+  ["South","Furniture","Chairs","Herman Miller Aeron",2021,4,285000,57000,6,"Standard"],
+  ["South","Furniture","Tables","Conference Table L",2022,7,165000,33000,4,"Standard"],
+  ["South","Furniture","Sofas","IKEA KIVIK Sofa",2021,11,72000,14400,5,"Economy"],
+  ["South","Office Supplies","Binders","Cardinal Binders",2022,3,15000,4500,40,"Economy"],
+  ["South","Office Supplies","Paper","Hammermill Copy Plus",2021,8,19000,5700,55,"Economy"],
+  ["South","Office Supplies","Envelopes","Staples Envelopes",2022,10,9000,2700,70,"Economy"],
+  ["East","Technology","Phones","Realme GT Neo",2021,3,75000,18750,20,"Standard"],
+  ["East","Technology","Phones","Samsung Galaxy A54",2022,5,92000,23000,22,"Economy"],
+  ["East","Technology","Laptops","Acer Aspire 7",2021,8,145000,36250,11,"Standard"],
+  ["East","Technology","Laptops","ASUS ROG Strix",2022,11,268000,67000,7,"Express"],
+  ["East","Technology","Accessories","JBL Soundbar",2022,2,48000,14400,18,"Standard"],
+  ["East","Furniture","Chairs","Featherlite Office Chair",2021,6,58000,11600,14,"Economy"],
+  ["East","Furniture","Tables","Folding Table Set",2022,4,42000,8400,10,"Economy"],
+  ["East","Furniture","Cabinets","Steel Filing Cabinet",2021,9,68000,13600,8,"Standard"],
+  ["East","Office Supplies","Binders","Mead Binders",2022,1,12000,3600,38,"Economy"],
+  ["East","Office Supplies","Paper","ITC Copy Power",2021,10,16000,4800,50,"Economy"],
+  ["East","Office Supplies","Labels","Avery Labels",2022,6,7500,2250,80,"Economy"],
+  ["West","Technology","Phones","Vivo V27 Pro",2021,1,82000,20500,18,"Standard"],
+  ["West","Technology","Phones","iPhone 15",2023,3,420000,105000,25,"Express"],
+  ["West","Technology","Laptops","Apple MacBook Air M2",2023,5,385000,96250,14,"Express"],
+  ["West","Technology","Laptops","Dell Inspiron 15",2022,8,158000,39500,13,"Standard"],
+  ["West","Technology","Accessories","Sony WH-1000XM5",2023,2,95000,28500,22,"Express"],
+  ["West","Furniture","Chairs","Godrej Interio Chair",2021,5,78000,15600,16,"Standard"],
+  ["West","Furniture","Tables","Wakefit Study Table",2022,9,55000,11000,12,"Economy"],
+  ["West","Furniture","Sofas","Pepperfry 3-Seater",2023,7,145000,29000,8,"Standard"],
+  ["West","Office Supplies","Binders","Leitz Binders",2022,4,14000,4200,35,"Economy"],
+  ["West","Office Supplies","Paper","Camlin Copier Paper",2023,1,21000,6300,58,"Economy"],
+  ["West","Office Supplies","Storage","Cello Drawers",2023,6,28000,8400,25,"Standard"],
+
+  // 2023-2024 expansion data
+  ["North","Technology","Phones","iPhone 15 Pro",2023,2,380000,95000,22,"Express"],
+  ["North","Technology","Laptops","Apple MacBook Pro M3",2023,4,445000,111250,12,"Express"],
+  ["North","Technology","Accessories","Meta Quest 3",2023,8,125000,37500,14,"Express"],
+  ["North","Furniture","Chairs","Steelcase Leap V2",2023,6,195000,39000,7,"Standard"],
+  ["North","Office Supplies","Paper","HP Premium Paper",2023,10,28000,8400,62,"Economy"],
+  ["North","Technology","Phones","Samsung Galaxy S24",2024,1,425000,106250,24,"Express"],
+  ["North","Technology","Laptops","Dell XPS 17",2024,3,520000,130000,10,"Express"],
+  ["North","Furniture","Tables","Autonomous SmartDesk",2024,5,285000,57000,8,"Standard"],
+  ["South","Technology","Phones","iPhone 15 Plus",2023,3,295000,73750,18,"Express"],
+  ["South","Technology","Laptops","HP Envy x360",2023,7,265000,66250,11,"Express"],
+  ["South","Technology","Accessories","Bose QuietComfort",2023,9,88000,26400,20,"Standard"],
+  ["South","Furniture","Chairs","Featherlite Workstation",2023,5,225000,45000,9,"Standard"],
+  ["South","Office Supplies","Storage","Quill Storage Box",2023,11,35000,10500,30,"Economy"],
+  ["South","Technology","Phones","Google Pixel 8 Pro",2024,2,315000,78750,16,"Express"],
+  ["South","Technology","Laptops","Lenovo Yoga Slim 9",2024,4,390000,97500,9,"Express"],
+  ["East","Technology","Phones","OnePlus 12",2023,4,145000,36250,24,"Standard"],
+  ["East","Technology","Laptops","ASUS Zenbook Pro",2023,6,295000,73750,9,"Express"],
+  ["East","Technology","Accessories","Realme Buds Air",2023,8,38000,11400,42,"Economy"],
+  ["East","Furniture","Chairs","Wipro Furniture Chair",2023,3,115000,23000,18,"Standard"],
+  ["East","Office Supplies","Binders","Esselte Binders",2023,12,18000,5400,45,"Economy"],
+  ["East","Technology","Phones","Samsung Galaxy S24+",2024,2,385000,96250,20,"Express"],
+  ["East","Technology","Laptops","Acer Swift 5",2024,4,245000,61250,14,"Standard"],
+  ["West","Technology","Phones","iPhone 15 Pro Max",2023,1,520000,130000,28,"Express"],
+  ["West","Technology","Laptops","Apple MacBook Pro M3 Max",2023,3,685000,171250,8,"Express"],
+  ["West","Technology","Accessories","Apple Vision Pro",2024,1,950000,285000,5,"Express"],
+  ["West","Furniture","Chairs","Herman Miller Embody",2023,7,385000,77000,5,"Express"],
+  ["West","Office Supplies","Paper","Navigator Copy Paper",2023,9,32000,9600,65,"Economy"],
+  ["West","Technology","Phones","Samsung Galaxy Z Fold 5",2024,3,685000,171250,12,"Express"],
+  ["West","Technology","Laptops","Apple MacBook Air M3",2024,5,425000,106250,16,"Express"],
+];
+
+// Compute product-level aggregates for table
+const productMap = {};
+rawData.forEach(([region,cat,sub,prod,year,month,rev,profit,orders,ship]) => {
+  if (!productMap[prod]) productMap[prod] = { cat, rev:0, profit:0, orders:0 };
+  productMap[prod].rev    += rev;
+  productMap[prod].profit += profit;
+  productMap[prod].orders += orders;
+});
+const allProducts = Object.entries(productMap)
+  .map(([name,d]) => ({ name, ...d, margin: ((d.profit/d.rev)*100).toFixed(1) }))
+  .sort((a,b) => b.rev - a.rev);
+
+// ── Chart instances ────────────────────────────────────────────────────────────
+let trendChart, regionChart, categoryChart, profitChart, shipChart;
+
+const COLORS = {
+  blue:   '#4361ee', green:  '#06d6a0', pink:   '#f72585',
+  yellow: '#ffd166', purple: '#7b2d8b', orange: '#f4a261',
+  teal:   '#2ec4b6', red:    '#e63946',
+};
+
+function fmt(n) {
+  if (n >= 1e6) return '₹' + (n/1e6).toFixed(2) + 'L';
+  if (n >= 1e3) return '₹' + (n/1e3).toFixed(1) + 'K';
+  return '₹' + n;
+}
+
+function applyFilters() {
+  const region   = document.getElementById('regionFilter').value;
+  const category = document.getElementById('categoryFilter').value;
+  const year     = document.getElementById('yearFilter').value;
+
+  const filtered = rawData.filter(([r,c,s,p,y]) =>
+    (region   === 'all' || r === region) &&
+    (category === 'all' || c === category) &&
+    (year     === 'all' || y === parseInt(year))
+  );
+
+  updateKPIs(filtered, year);
+  updateTrendChart(filtered);
+  updateRegionChart(filtered);
+  updateCategoryChart(filtered);
+  updateProfitChart(filtered);
+  updateShipChart(filtered);
+  updateTable(filtered);
+}
+
+function resetFilters() {
+  document.getElementById('regionFilter').value   = 'all';
+  document.getElementById('categoryFilter').value = 'all';
+  document.getElementById('yearFilter').value     = 'all';
+  applyFilters();
+}
+
+function updateKPIs(data, yearSel) {
+  const rev    = data.reduce((s,[,,,,,, r]) => s+r, 0);
+  const orders = data.reduce((s,[,,,,,,,, o]) => s+o, 0);
+  const profit = data.reduce((s,[,,,,,,, p]) => s+p, 0);
+  const aov    = orders ? Math.round(rev/orders) : 0;
+
+  // Prior year comparison
+  let prevYear = yearSel === 'all' ? null : parseInt(yearSel) - 1;
+  const prev = prevYear
+    ? rawData.filter(([,,,, y]) => y === prevYear)
+    : rawData.filter(([,,,, y]) => y === 2021);
+  const prevRev = prev.reduce((s,[,,,,,, r]) => s+r, 0);
+  const pct = prevRev ? (((rev - prevRev) / prevRev) * 100).toFixed(1) : 0;
+  const sign = pct >= 0 ? '+' : '';
+
+  document.getElementById('kpiRevenue').textContent  = fmt(rev);
+  document.getElementById('kpiOrders').textContent   = orders.toLocaleString();
+  document.getElementById('kpiProfit').textContent   = fmt(profit);
+  document.getElementById('kpiAOV').textContent      = fmt(aov);
+  document.getElementById('kpiRevGrowth').textContent = `${sign}${pct}% vs prior period`;
+  document.getElementById('kpiRevGrowth').className  = 'sub' + (pct < 0 ? ' neg' : '');
+}
+
+function updateTrendChart(data) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthly = Array(12).fill(0);
+  data.forEach(([,,,,,m,r]) => { monthly[m-1] += r; });
+
+  if (trendChart) trendChart.destroy();
+  trendChart = new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: monthly,
+        borderColor: COLORS.blue, backgroundColor: 'rgba(67,97,238,0.1)',
+        borderWidth: 2.5, fill: true, tension: 0.4, pointRadius: 4,
+        pointBackgroundColor: COLORS.blue,
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => fmt(v) } } } }
+  });
+}
+
+function updateRegionChart(data) {
+  const regions = ['North','South','East','West'];
+  const vals    = regions.map(r => data.filter(([rg]) => rg===r).reduce((s,[,,,,,, v])=>s+v, 0));
+
+  if (regionChart) regionChart.destroy();
+  regionChart = new Chart(document.getElementById('regionChart'), {
+    type: 'doughnut',
+    data: {
+      labels: regions,
+      datasets: [{ data: vals, backgroundColor: [COLORS.blue, COLORS.green, COLORS.pink, COLORS.yellow], borderWidth: 2 }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+}
+
+function updateCategoryChart(data) {
+  const cats = ['Technology','Furniture','Office Supplies'];
+  const vals  = cats.map(c => data.filter(([,cat]) => cat===c).reduce((s,[,,,,,, v])=>s+v, 0));
+
+  if (categoryChart) categoryChart.destroy();
+  categoryChart = new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+      labels: cats,
+      datasets: [{ label: 'Revenue', data: vals,
+        backgroundColor: [COLORS.blue, COLORS.teal, COLORS.orange], borderRadius: 8 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => fmt(v) } } } }
+  });
+}
+
+function updateProfitChart(data) {
+  const cats = ['Technology','Furniture','Office Supplies'];
+  const margins = cats.map(c => {
+    const sub = data.filter(([,cat]) => cat===c);
+    const r = sub.reduce((s,[,,,,,, v])=>s+v, 0);
+    const p = sub.reduce((s,[,,,,,,, v])=>s+v, 0);
+    return r ? +((p/r)*100).toFixed(1) : 0;
+  });
+
+  if (profitChart) profitChart.destroy();
+  profitChart = new Chart(document.getElementById('profitChart'), {
+    type: 'bar',
+    data: {
+      labels: cats,
+      datasets: [{ label: 'Profit Margin %', data: margins,
+        backgroundColor: [COLORS.green, COLORS.yellow, COLORS.purple], borderRadius: 8 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => v + '%' } } } }
+  });
+}
+
+function updateShipChart(data) {
+  const modes = ['Standard','Express','Economy'];
+  const vals  = modes.map(m => data.filter(([,,,,,,,,,s]) => s===m).reduce((s,[,,,,,,,,o])=>s+o, 0));
+
+  if (shipChart) shipChart.destroy();
+  shipChart = new Chart(document.getElementById('shipChart'), {
+    type: 'pie',
+    data: {
+      labels: modes,
+      datasets: [{ data: vals, backgroundColor: [COLORS.blue, COLORS.pink, COLORS.yellow], borderWidth: 2 }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+}
+
+function updateTable(data) {
+  // Rebuild product map from filtered data
+  const pm = {};
+  data.forEach(([region,cat,sub,prod,year,month,rev,profit,orders]) => {
+    if (!pm[prod]) pm[prod] = { cat, rev:0, profit:0 };
+    pm[prod].rev    += rev;
+    pm[prod].profit += profit;
+  });
+  const top10 = Object.entries(pm)
+    .map(([name,d]) => ({ name, ...d, margin: ((d.profit/d.rev)*100).toFixed(1) }))
+    .sort((a,b) => b.rev - a.rev).slice(0,10);
+
+  const tbody = document.getElementById('topProductsTable');
+  tbody.innerHTML = top10.map((p,i) => {
+    const perf = p.margin > 25 ? 'high' : p.margin > 15 ? 'med' : 'low';
+    const label = p.margin > 25 ? 'High' : p.margin > 15 ? 'Medium' : 'Low';
+    return `<tr>
+      <td><strong>${i+1}</strong></td>
+      <td>${p.name}</td>
+      <td>${p.cat}</td>
+      <td><strong>${fmt(p.rev)}</strong></td>
+      <td>${fmt(p.profit)}</td>
+      <td>${p.margin}%</td>
+      <td><span class="badge ${perf}">${label}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// Init
+applyFilters();
+</script>
+</body>
+</html>

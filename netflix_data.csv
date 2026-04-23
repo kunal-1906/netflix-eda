@@ -1,0 +1,101 @@
+Show_Id,Title,Type,Genre,Rating,Release_Year,Duration_Min,Country,Language,IMDb_Score,Votes
+1,Stranger Things,TV Show,Sci-Fi,TV-14,2016,51,USA,English,8.7,1200000
+2,The Crown,TV Show,Drama,TV-MA,2016,58,UK,English,8.6,280000
+3,Money Heist,TV Show,Crime,TV-MA,2017,45,Spain,Spanish,8.2,450000
+4,Dark,TV Show,Sci-Fi,TV-MA,2017,60,Germany,German,8.8,320000
+5,Narcos,TV Show,Crime,TV-MA,2015,50,USA,English,8.8,410000
+6,Ozark,TV Show,Drama,TV-MA,2017,60,USA,English,8.5,330000
+7,The Witcher,TV Show,Fantasy,TV-MA,2019,60,USA,English,8.2,450000
+8,Squid Game,TV Show,Thriller,TV-MA,2021,32,South Korea,Korean,8.0,580000
+9,Emily in Paris,TV Show,Romance,TV-MA,2020,30,France,English,6.9,120000
+10,Bridgerton,TV Show,Romance,TV-14,2020,60,UK,English,7.3,190000
+11,The Umbrella Academy,TV Show,Sci-Fi,TV-14,2019,55,USA,English,7.9,210000
+12,Mindhunter,TV Show,Crime,TV-MA,2017,55,USA,English,8.6,350000
+13,Sex Education,TV Show,Comedy,TV-MA,2019,45,UK,English,8.3,290000
+14,You,TV Show,Thriller,TV-MA,2018,45,USA,English,7.7,280000
+15,Black Mirror,TV Show,Sci-Fi,TV-MA,2011,60,UK,English,8.8,500000
+16,Extraction,Movie,Action,TV-MA,2020,116,USA,English,6.7,300000
+17,Bird Box,Movie,Thriller,TV-MA,2018,124,USA,English,6.6,420000
+18,The Irishman,Movie,Crime,TV-MA,2019,209,USA,English,7.8,560000
+19,Roma,Movie,Drama,TV-MA,2018,135,Mexico,Spanish,7.7,280000
+20,Marriage Story,Movie,Drama,TV-MA,2019,137,USA,English,7.9,370000
+21,The Two Popes,Movie,Drama,TV-PG,2019,125,UK,English,7.6,190000
+22,Mank,Movie,Drama,TV-MA,2020,131,USA,English,6.9,150000
+23,Da 5 Bloods,Movie,Drama,TV-MA,2020,154,USA,English,6.5,120000
+24,Malcolm and Marie,Movie,Drama,TV-MA,2021,106,USA,English,6.2,90000
+25,To All the Boys,Movie,Romance,TV-14,2018,99,USA,English,6.8,180000
+26,The Old Guard,Movie,Action,TV-MA,2020,125,USA,English,6.6,230000
+27,Enola Holmes,Movie,Mystery,TV-14,2020,123,UK,English,6.6,270000
+28,Project Power,Movie,Action,TV-MA,2020,113,USA,English,6.0,200000
+29,Army of the Dead,Movie,Horror,TV-MA,2021,148,USA,English,5.9,260000
+30,Lupin,TV Show,Crime,TV-MA,2021,45,France,French,7.5,200000
+31,Elite,TV Show,Thriller,TV-MA,2018,45,Spain,Spanish,7.3,180000
+32,Sacred Games,TV Show,Crime,TV-MA,2018,55,India,Hindi,8.7,150000
+33,Delhi Crime,TV Show,Crime,TV-MA,2019,50,India,Hindi,8.5,80000
+34,Mirzapur,TV Show,Crime,TV-MA,2018,50,India,Hindi,8.4,200000
+35,Jamtara,TV Show,Crime,TV-14,2020,30,India,Hindi,7.3,60000
+36,Scam 1992,TV Show,Drama,TV-MA,2020,50,India,Hindi,9.3,250000
+37,Never Have I Ever,TV Show,Comedy,TV-14,2020,30,USA,English,7.9,150000
+38,Ginny and Georgia,TV Show,Drama,TV-14,2021,60,USA,English,7.4,130000
+39,Fate: The Winx Saga,TV Show,Fantasy,TV-14,2021,45,Ireland,English,5.9,70000
+40,Shadow and Bone,TV Show,Fantasy,TV-14,2021,55,USA,English,7.6,160000
+41,Sweet Tooth,TV Show,Sci-Fi,TV-14,2021,45,USA,English,7.8,110000
+42,Cobra Kai,TV Show,Drama,TV-14,2018,30,USA,English,8.5,260000
+43,Outer Banks,TV Show,Adventure,TV-14,2020,60,USA,English,7.6,270000
+44,Virgin River,TV Show,Romance,TV-14,2019,45,USA,English,7.4,100000
+45,Firefly Lane,TV Show,Drama,TV-14,2021,60,USA,English,7.3,90000
+46,The Haunting of Hill House,TV Show,Horror,TV-MA,2018,60,USA,English,8.6,250000
+47,Haunting of Bly Manor,TV Show,Horror,TV-MA,2020,60,USA,English,7.4,140000
+48,The Queen's Gambit,TV Show,Drama,TV-MA,2020,60,USA,English,8.6,480000
+49,Unorthodox,TV Show,Drama,TV-MA,2020,55,Germany,Yiddish,7.6,90000
+50,Halston,TV Show,Drama,TV-MA,2021,60,USA,English,6.8,50000
+51,The Serpent,TV Show,Crime,TV-MA,2021,55,UK,English,7.4,60000
+52,Behind Her Eyes,TV Show,Thriller,TV-MA,2021,45,UK,English,7.0,130000
+53,The Dig,Movie,Drama,TV-PG,2021,112,UK,English,6.9,80000
+54,Pieces of a Woman,Movie,Drama,TV-MA,2020,128,USA,English,7.0,120000
+55,The Midnight Sky,Movie,Sci-Fi,TV-MA,2020,118,USA,English,5.8,180000
+56,Eurovision Song Contest,Movie,Comedy,TV-PG,2020,123,USA,English,6.3,120000
+57,Holidate,Movie,Romance,TV-MA,2020,104,USA,English,5.9,100000
+58,The Kissing Booth 2,Movie,Romance,TV-14,2020,132,USA,English,5.5,90000
+59,Work It,Movie,Comedy,TV-PG,2020,94,USA,English,6.2,80000
+60,The Prom,Movie,Musical,TV-MA,2020,131,USA,English,5.8,70000
+61,Cobra Kai S3,TV Show,Drama,TV-14,2021,30,USA,English,8.6,200000
+62,Fate S2,TV Show,Fantasy,TV-14,2022,45,Ireland,English,5.7,55000
+63,Money Heist S5,TV Show,Crime,TV-MA,2021,45,Spain,Spanish,8.0,380000
+64,Squid Game S2,TV Show,Thriller,TV-MA,2024,50,South Korea,Korean,7.5,300000
+65,Stranger Things S4,TV Show,Sci-Fi,TV-14,2022,75,USA,English,9.0,900000
+66,Wednesday,TV Show,Mystery,TV-14,2022,45,USA,English,8.1,520000
+67,Glass Onion,Movie,Mystery,TV-MA,2022,139,USA,English,7.1,350000
+68,The Gray Man,Movie,Action,TV-MA,2022,122,USA,English,6.5,310000
+69,Troll,Movie,Action,PG-13,2022,101,Norway,Norwegian,6.0,90000
+70,All Quiet on the Western Front,Movie,Drama,TV-MA,2022,148,Germany,German,7.8,220000
+71,Guillermo del Toro's Pinocchio,Movie,Animation,PG,2022,117,USA,English,7.6,120000
+72,Blonde,Movie,Drama,NC-17,2022,166,USA,English,5.9,150000
+73,The Adam Project,Movie,Sci-Fi,PG-13,2022,106,USA,English,6.7,320000
+74,Spiderhead,Movie,Sci-Fi,TV-MA,2022,107,USA,English,5.4,130000
+75,The Bubble,Movie,Comedy,TV-MA,2022,126,USA,English,5.0,100000
+76,Emily in Paris S3,TV Show,Romance,TV-MA,2022,30,France,English,6.7,100000
+77,Manifest,TV Show,Drama,TV-14,2018,43,USA,English,7.1,150000
+78,Inventing Anna,TV Show,Crime,TV-MA,2022,60,USA,English,6.8,130000
+79,Ozark S4,TV Show,Drama,TV-MA,2022,60,USA,English,8.4,280000
+80,The Lincoln Lawyer,TV Show,Legal,TV-MA,2022,60,USA,English,7.7,140000
+81,Formula 1: Drive to Survive,TV Show,Documentary,TV-MA,2019,40,UK,English,8.8,100000
+82,Making a Murderer,TV Show,Documentary,TV-MA,2015,55,USA,English,8.6,130000
+83,The Last Dance,TV Show,Documentary,TV-MA,2020,50,USA,English,9.1,200000
+84,Our Planet,TV Show,Documentary,TV-G,2019,50,UK,English,9.3,100000
+85,Tiger King,TV Show,Documentary,TV-MA,2020,45,USA,English,7.5,200000
+86,Don't Look Up,Movie,Comedy,TV-MA,2021,138,USA,English,7.2,650000
+87,Red Notice,Movie,Action,PG-13,2021,118,USA,English,6.3,580000
+88,The Harder They Fall,Movie,Western,TV-MA,2021,139,USA,English,6.5,130000
+89,tick tick BOOM,Movie,Musical,PG-13,2021,115,USA,English,7.6,110000
+90,The Power of the Dog,Movie,Drama,TV-MA,2021,126,New Zealand,English,6.8,220000
+91,Spencer,Movie,Drama,PG-13,2021,111,UK,English,6.9,120000
+92,Munich: The Edge of War,Movie,Thriller,TV-MA,2021,129,UK,English,6.8,80000
+93,Rescued by Ruby,Movie,Drama,PG,2022,90,USA,English,7.2,60000
+94,Windfall,Movie,Thriller,TV-MA,2022,92,USA,English,5.5,80000
+95,Texas Chainsaw Massacre,Movie,Horror,TV-MA,2022,83,USA,English,4.1,90000
+96,Choose or Die,Movie,Horror,TV-MA,2022,84,UK,English,4.6,60000
+97,Senior Year,Movie,Comedy,TV-MA,2022,111,USA,English,5.5,130000
+98,The In Between,Movie,Romance,PG-13,2022,92,USA,English,6.1,70000
+99,Along for the Ride,Movie,Romance,TV-14,2022,104,USA,English,6.1,80000
+100,Heartstopper,TV Show,Romance,TV-G,2022,30,UK,English,8.7,180000
